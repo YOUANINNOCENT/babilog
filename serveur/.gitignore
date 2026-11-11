@@ -1,0 +1,8 @@
+.dart_tool/
+# Données locales : bases SQLite et photos envoyées pendant les tests (jamais sur GitHub).
+# annonces_reelles.json et images/illustrations (libres de droits) restent suivis : le déploiement en a besoin.
+donnees/*.sqlite
+donnees/*.sqlite-*
+donnees/images/annonces/
+build/
+.env

@@ -1,0 +1,12 @@
+# Jamais dans l'image : secrets, bases locales, fichiers de travail
+**/.env
+**/.env.*
+**/.dart_tool/
+**/build/
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.DS_Store
+serveur/donnees/*.sqlite
+ia_service/
+.vscode/

@@ -1,0 +1,18 @@
+name: babilogis_serveur
+description: API et serveur web BabiLogis, entièrement en Dart (shelf + SQLite).
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  crypto: ^3.0.3
+  mailer: ^7.2.2
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
+  shelf_static: ^1.1.2
+  sqlite3: ^2.4.0
+
+dev_dependencies:
+  test: ^1.25.0

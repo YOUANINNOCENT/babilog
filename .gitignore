@@ -1,0 +1,28 @@
+# Secrets : jamais sur GitHub
+**/.env
+**/.env.*
+!**/.env.exemple
+**/*.key
+
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+
+# Dart / Flutter
+**/.dart_tool/
+**/build/
+
+# Base locale
+serveur/donnees/*.sqlite
+
+.DS_Store
+
+# Dossier généré pour alwaysdata
+deploiement/alwaysdata/envoi/
+
+# Dossiers de travail
+deploiement/_a_supprimer*/
+**/*.sqlite-journal
+**/*.sqlite-wal
+**/*.sqlite-shm

@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "babilogi (Flutter Web)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/babilogi",
+      "program": "${workspaceFolder}/babilogi/lib/main.dart",
+      "deviceId": "chrome"
+    },
+    {
+      "name": "serveur (Dart)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/serveur",
+      "program": "${workspaceFolder}/serveur/bin/serveur.dart"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Serveur + Site",
+      "configurations": ["serveur (Dart)", "babilogi (Flutter Web)"]
+    }
+  ]
+}
