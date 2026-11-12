@@ -204,7 +204,27 @@ class Base {
     if (b.nbAnnoncesReelles > 0) b.supprimerComptesDemo();
     if (reel != null && File(reel).existsSync()) b.completerLiensOrigine(reel);
     b.importerIllustrations();
+    b.retirerMentionsCollecte();
     return b;
+  }
+
+  /// Phrase technique ajoutée aux annonces collectées (« Annonce publique collectée sur … Annonce d'origine : URL ») :
+  /// elle n'est plus affichée aux visiteurs.
+  static final _mentionCollecte =
+      RegExp(r"\s*Annonce publique collectée sur .*?Annonce d'origine\s*:\s*\S+", dotAll: true);
+
+  /// Description sans la mention technique de collecte.
+  static String sansMentionCollecte(String description) => description.replaceAll(_mentionCollecte, '').trim();
+
+  /// Retire une fois pour toutes la mention de collecte des descriptions enregistrées.
+  void retirerMentionsCollecte() {
+    final lignes = this.lignes("SELECT id, description FROM annonces WHERE description LIKE '%Annonce publique collectée sur%'");
+    if (lignes.isEmpty) return;
+    transaction(() {
+      for (final l in lignes) {
+        executer('UPDATE annonces SET description = ? WHERE id = ?', [sansMentionCollecte('${l['description']}'), l['id']]);
+      }
+    });
   }
 
   void fermer() => db.dispose();

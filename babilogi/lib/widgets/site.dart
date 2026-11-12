@@ -302,8 +302,7 @@ class PiedDePage extends StatelessWidget {
           runSpacing: 8,
           spacing: 24,
           children: [
-            Text('BabiLogis — projet de soutenance Développeur Data IA', style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
-            Text('Les estimations sont indicatives.', style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
+            Text('© 2026 BabiLogis — Le bon logement, au juste prix.', style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
           ],
         )),
       ),

@@ -515,31 +515,91 @@ class _SignalementState extends State<_Signalement> {
 
 /// Annonce collectée sur le web : son annonceur n'a pas de compte BabiLogis,
 /// le locataire est renvoyé vers l'annonce d'origine pour le contacter.
-class _AnnonceCollectee extends StatelessWidget {
+/// Un propriétaire ou une agence connecté(e) peut la gérer : modifier, changer les photos, supprimer.
+/// Dès qu'il la modifie, elle devient la sienne (elle passe dans son espace).
+class _AnnonceCollectee extends StatefulWidget {
   const _AnnonceCollectee({required this.a});
 
   final Annonce a;
 
   @override
+  State<_AnnonceCollectee> createState() => _AnnonceCollecteeState();
+}
+
+class _AnnonceCollecteeState extends State<_AnnonceCollectee> {
+  bool _envoi = false;
+
+  Future<void> _supprimer() async {
+    final a = widget.a;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Supprimer ${a.id} ?'),
+        content: Text('« ${a.titre} à ${a.quartier} » sera retirée définitivement de BabiLogis.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer')),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    setState(() => _envoi = true);
+    try {
+      await Api.instance.delete('/espace/annonces/${a.id}');
+      if (!mounted) return;
+      message(context, 'Annonce ${a.id} supprimée.');
+      aller(context, '/annonces');
+    } on ApiException catch (e) {
+      if (mounted) message(context, e.message, erreur: true);
+    } finally {
+      if (mounted) setState(() => _envoi = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final a = widget.a;
+    final u = SessionScope.of(context).utilisateur;
+    final gestion = u != null && u.estAnnonceur;
     final lien = a.lienOrigine;
     final site = lien == null ? null : Uri.tryParse(lien)?.host.replaceFirst('www.', '');
     return Carte(
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        const Text('Contacter l\'annonceur', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
-        const SizedBox(height: 6),
-        Text(
-            'Cette annonce a été collectée sur ${site ?? 'le web'} pour l\'analyse des prix : son annonceur n\'est pas '
-            'inscrit sur BabiLogis. La messagerie et les demandes de visite sont disponibles sur les annonces publiées '
-            'par les propriétaires et agences inscrits.',
-            style: const TextStyle(color: Couleurs.texte2)),
-        if (lien != null) ...[
+        if (gestion) ...[
+          const Text('Gérer cette annonce', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
+          const SizedBox(height: 6),
+          const Text(
+              'Ce logement est le vôtre ? Mettez à jour le texte, le loyer et les photos : '
+              'l\'annonce passera dans votre espace et vous recevrez les messages et demandes de visite.',
+              style: TextStyle(color: Couleurs.texte2)),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: () => launchUrl(Uri.parse(lien), webOnlyWindowName: '_blank'),
-            icon: const Icon(Icons.open_in_new, size: 18),
-            label: Text('Voir l\'annonce d\'origine${site == null ? '' : ' ($site)'}'),
+          FilledButton.icon(
+            onPressed: _envoi ? null : () => aller(context, '/espace/annonces/${a.id}/modifier'),
+            icon: const Icon(Icons.edit_outlined, size: 18),
+            label: const Text('Modifier l\'annonce et les photos'),
           ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _envoi ? null : _supprimer,
+            style: OutlinedButton.styleFrom(foregroundColor: Couleurs.danger, side: const BorderSide(color: Couleurs.danger)),
+            icon: const Icon(Icons.delete_outline, size: 18),
+            label: const Text('Supprimer l\'annonce'),
+          ),
+        ] else ...[
+          const Text('Contacter l\'annonceur', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
+          const SizedBox(height: 6),
+          const Text(
+              'L\'annonceur de ce logement n\'est pas encore inscrit sur BabiLogis : la messagerie et les demandes '
+              'de visite ne sont pas disponibles pour cette annonce.',
+              style: TextStyle(color: Couleurs.texte2)),
+          if (lien != null) ...[
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () => launchUrl(Uri.parse(lien), webOnlyWindowName: '_blank'),
+              icon: const Icon(Icons.open_in_new, size: 18),
+              label: Text('Voir l\'annonce d\'origine${site == null ? '' : ' ($site)'}'),
+            ),
+          ],
         ],
       ]),
     );

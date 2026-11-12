@@ -254,7 +254,7 @@ class Api {
       'estimation_max': mx,
       'equipements': equip,
       'annonceur': a['type_annonceur'] == 'agence' ? a['annonceur_nom'] : 'Particulier',
-      'description': a['description'] ?? '',
+      'description': Base.sansMentionCollecte('${a['description'] ?? ''}'),
       'caution_mois': a['caution_mois'],
       'avance_mois': a['avance_mois'],
       'age_jours': publiee == null ? 0 : joursEntre(publiee, maintenant).clamp(0, 100000),
@@ -335,7 +335,7 @@ class Api {
   /// Ajoute une photo à l'annonce : fichier envoyé (base64) ou illustration de la bibliothèque.
   Future<Object> _ajouterPhoto(Request q, String ref) async {
     final u = _exiger(q, role: 'annonceur');
-    final a = _annoncePourAnnonceur(u, ref);
+    final a = _annoncePourAnnonceur(u, ref, prendreEnCharge: true);
     final d = await _corps(q);
     final annonceId = a['id'] as int;
     final nb = base.valeur('SELECT COUNT(*) FROM photos WHERE annonce_id = ?', [annonceId]) as int;
@@ -375,7 +375,7 @@ class Api {
 
   Object _supprimerPhoto(Request q, String ref, int id) {
     final u = _exiger(q, role: 'annonceur');
-    final a = _annoncePourAnnonceur(u, ref);
+    final a = _annoncePourAnnonceur(u, ref, prendreEnCharge: true);
     final p = base.ligne('SELECT * FROM photos WHERE id = ? AND annonce_id = ?', [id, a['id']]);
     if (p == null) throw ErreurApi(404, 'Photo introuvable.');
     base.executer('DELETE FROM photos WHERE id = ?', [id]);
@@ -940,10 +940,23 @@ class Api {
     };
   }
 
-  Map<String, Object?> _annoncePourAnnonceur(Map<String, Object?> u, String ref) {
+  /// Annonce modifiable par ce compte : la sienne, toutes pour l'administrateur, et les annonces
+  /// collectées sur le web (compte technique « collecte »), ouvertes aux propriétaires et agences.
+  /// Avec [prendreEnCharge], une annonce collectée que l'on modifie (texte ou photos) devient celle
+  /// du compte : elle passe dans son espace, reçoit messages et visites, et les autres comptes ne
+  /// peuvent plus la modifier.
+  Map<String, Object?> _annoncePourAnnonceur(Map<String, Object?> u, String ref, {bool prendreEnCharge = false}) {
     final a = base.ligne('$_selectAnnonce WHERE a.reference = ?', [ref]);
     if (a == null) throw ErreurApi(404, 'Annonce introuvable.');
-    if (a['utilisateur_id'] != u['id'] && u['role'] != 'admin') throw ErreurApi(403, 'Cette annonce ne vous appartient pas.');
+    final collectee = a['annonceur_email'] == Base.compteCollecte;
+    if (a['utilisateur_id'] != u['id'] && u['role'] != 'admin' && !collectee) {
+      throw ErreurApi(403, 'Cette annonce ne vous appartient pas.');
+    }
+    if (collectee && prendreEnCharge && u['role'] != 'admin') {
+      base.executer('UPDATE annonces SET utilisateur_id = ?, lien_origine = NULL, modifiee_le = ? WHERE id = ?',
+          [u['id'], maintenant.toIso8601String(), a['id']]);
+      return base.ligne('$_selectAnnonce WHERE a.id = ?', [a['id']])!;
+    }
     return a;
   }
 
@@ -954,7 +967,7 @@ class Api {
 
   Future<Object> _enregistrer(Request q, String? ref) async {
     final u = _exiger(q, role: 'annonceur');
-    final existante = ref == null ? null : _annoncePourAnnonceur(u, ref);
+    final existante = ref == null ? null : _annoncePourAnnonceur(u, ref, prendreEnCharge: true);
     final d = await _corps(q);
 
     var quartierId = _entier(d['quartier_id']);

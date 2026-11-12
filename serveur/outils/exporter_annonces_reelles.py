@@ -100,10 +100,9 @@ def main(dossier: Path, sortie: Path) -> None:
         eqs = [e for e in str(x.equipements).split(";") if e and e != "nan"]
         titre = titre_propre(x.titre)
         site = SITES.get(x.site, x.site)
-        description = (f"{titre}. " if len(titre) > 14 else "") \
-            + ("Haut standing. " if "haut_standing" in eqs else "") \
-            + f"Annonce publique collectée sur {site} en octobre 2026 (données de la soutenance BabiLogis). " \
-            + f"Annonce d'origine : {x.url}"
+        # Le site et le lien d'origine restent dans le champ « url » (lien_origine), pas dans le texte affiché.
+        description = ((f"{titre}. " if len(titre) > 14 else "")
+                       + ("Haut standing. " if "haut_standing" in eqs else "")).strip()
         annonces.append({
             "reference": f"BL-{1001 + n}",
             "commune": x.commune,
