@@ -208,10 +208,9 @@ class Base {
     return b;
   }
 
-  /// Phrase technique ajoutée aux annonces collectées (« Annonce publique collectée sur … Annonce d'origine : URL ») :
-  /// elle n'est plus affichée aux visiteurs.
-  static final _mentionCollecte =
-      RegExp(r"\s*Annonce publique collectée sur .*?Annonce d'origine\s*:\s*\S+", dotAll: true);
+  /// Phrase technique ajoutée en fin des annonces collectées (« Annonce publique collectée sur … Annonce d'origine : URL ») :
+  /// elle n'est plus affichée aux visiteurs. On retire tout jusqu'à la fin (le lien peut contenir des espaces).
+  static final _mentionCollecte = RegExp(r'\(?\s*Annonce publique collectée sur[\s\S]*$');
 
   /// Description sans la mention technique de collecte.
   static String sansMentionCollecte(String description) => description.replaceAll(_mentionCollecte, '').trim();

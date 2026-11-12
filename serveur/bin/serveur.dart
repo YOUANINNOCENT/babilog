@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:babilogis_serveur/babilogis_serveur.dart';
@@ -112,6 +113,25 @@ Future<void> main(List<String> args) async {
       '${securite.originesAutorisees.isEmpty ? 'toutes origines' : securite.originesAutorisees.join(', ')}'
       '${securite.confianceProxy ? ' · IP client via le proxy' : ''}');
   stdout.writeln('  Ctrl + C pour arrêter.');
+
+  // Déploiement : quand un nouveau programme compilé remplace celui-ci, le serveur s'arrête de lui-même
+  // et l'hébergeur (alwaysdata) le relance à la requête suivante avec la nouvelle version.
+  final executable = File(Platform.resolvedExecutable);
+  if (!executable.path.endsWith('dart') && executable.existsSync()) {
+    final date = executable.lastModifiedSync();
+    Timer.periodic(const Duration(seconds: 15), (_) async {
+      try {
+        if (executable.existsSync() && executable.lastModifiedSync() != date) {
+          stdout.writeln('Nouvelle version du serveur détectée : redémarrage.');
+          await serveur.close();
+          base.fermer();
+          exit(0);
+        }
+      } on FileSystemException {
+        // Fichier en cours de remplacement : on réessaiera au prochain tour.
+      }
+    });
+  }
 
   ProcessSignal.sigint.watch().listen((_) async {
     await serveur.close(force: true);

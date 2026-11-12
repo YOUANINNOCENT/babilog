@@ -56,6 +56,8 @@ class Api {
     r.get('/api/sante', (Request _) => reponseJson({
           'statut': 'ok',
           'service': 'BabiLogis API (Dart)',
+          // Commit déployé (fourni à la compilation) : le déploiement vérifie que la nouvelle version répond.
+          'version': const String.fromEnvironment('VERSION', defaultValue: 'dev'),
           'donnees': base.nbAnnoncesReelles > 0 ? 'reelles' : 'demonstration',
           'nb_annonces': base.valeur("SELECT COUNT(*) FROM annonces WHERE statut = 'publiee'"),
           'heure': maintenant.toIso8601String(),
@@ -675,7 +677,19 @@ class Api {
   }
 
   // ── Comptes ─────────────────────────────────────────────────────────────
+  /// Adresses administrateur (variable ADMIN_EMAIL, plusieurs adresses séparées par des virgules).
+  static Set<String> get _adressesAdmin => (Platform.environment['ADMIN_EMAIL'] ?? '')
+      .split(',')
+      .map((e) => e.trim().toLowerCase())
+      .where((e) => e.isNotEmpty)
+      .toSet();
+
   Map<String, Object?> _ouvrirSession(int id) {
+    // Compte listé dans ADMIN_EMAIL : il devient administrateur dès sa connexion (adresse confirmée par code).
+    final email = '${base.valeur('SELECT email FROM utilisateurs WHERE id = ?', [id]) ?? ''}'.toLowerCase();
+    if (_adressesAdmin.contains(email)) {
+      base.executer("UPDATE utilisateurs SET role = 'admin' WHERE id = ? AND role != 'admin'", [id]);
+    }
     final jeton = nouveauJeton();
     base.executer('UPDATE utilisateurs SET jeton = ?, jeton_expire_le = ? WHERE id = ?',
         [empreinteJeton(jeton), maintenant.add(dureeSession).toIso8601String(), id]);

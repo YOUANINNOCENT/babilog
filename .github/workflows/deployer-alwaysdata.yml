@@ -48,8 +48,17 @@ jobs:
       - name: Redémarrer le serveur
         run: |
           # alwaysdata relance automatiquement le programme à la requête suivante
-          ssh youan@ssh-youan.alwaysdata.net 'pkill -u youan -f "[/]home/youan/babilogis/serveur" || true'
-          sleep 3
-          curl -fsS --retry 10 --retry-delay 5 --retry-all-errors https://youan.alwaysdata.net/api/sante
-          echo
-          echo "✓ BabiLogis est à jour : https://youan.alwaysdata.net"
+          # Le serveur s'arrête aussi tout seul dès qu'il voit que son programme a été remplacé (15 s).
+          ssh youan@ssh-youan.alwaysdata.net 'pkill -u youan -f "[b]abilogis/serveur" || true' || true
+          # On attend que la NOUVELLE version réponde (champ « version » = commit déployé).
+          for i in $(seq 1 30); do
+            sleep 10
+            REPONSE=$(curl -fsS https://youan.alwaysdata.net/api/sante || true)
+            echo "$REPONSE"
+            if echo "$REPONSE" | grep -q "\"version\":\"$GITHUB_SHA\""; then
+              echo "✓ BabiLogis est à jour : https://youan.alwaysdata.net"
+              exit 0
+            fi
+          done
+          echo "✗ Le serveur en ligne n'a pas redémarré sur la nouvelle version."
+          exit 1

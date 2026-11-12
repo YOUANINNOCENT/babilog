@@ -17,7 +17,7 @@ grep -q "useLocalCanvasKit:\s*true" "$SORTIE/site/index.html" "$SORTIE/site/flut
   || rm -rf "$SORTIE/site/canvaskit"
 
 echo "2/3 Serveur Dart compilé pour Linux x64 (les serveurs alwaysdata)…"
-(cd "$RACINE/serveur" && dart pub get && dart compile exe bin/serveur.dart \
+(cd "$RACINE/serveur" && dart pub get && dart compile exe bin/serveur.dart -DVERSION="${GITHUB_SHA:-local}" \
    --target-os=linux --target-arch=x64 -o "$SORTIE/serveur")
 
 echo "3/3 Annonces réelles et illustrations…"
