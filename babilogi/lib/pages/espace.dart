@@ -214,7 +214,7 @@ class _PageEspaceState extends State<PageEspace> {
                 child: Vide(
                   icone: Icons.add_home_outlined,
                   titre: 'Aucune annonce',
-                  texte: 'Publiez votre première annonce : le loyer juste est estimé pendant la saisie.',
+                  texte: 'Publiez votre première annonce : le loyer juste est estimé pendant la saisie.',
                   action: FilledButton(onPressed: () => aller(context, '/espace/annonces/nouvelle'), child: const Text('Publier une annonce')),
                 ),
               )

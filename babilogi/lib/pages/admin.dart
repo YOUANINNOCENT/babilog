@@ -127,7 +127,7 @@ class _PageAdminState extends State<PageAdmin> {
                     ),
                   ),
               const SizedBox(height: 8),
-              const Text('Le risque IA est une aide à la décision : la décision finale revient toujours à l\'administrateur.',
+              const Text('Le risque IA est une aide à la décision : la décision finale revient toujours à l\'administrateur.',
                   style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
             ],
           );

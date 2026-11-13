@@ -134,7 +134,7 @@ class _PageMotDePasseOublieState extends State<PageMotDePasseOublie> {
                 Titre(_codeEnvoye ? 'Nouveau mot de passe' : 'Mot de passe oublié', taille: 28),
                 const SizedBox(height: 6),
                 if (!_codeEnvoye)
-                  const Text('Indiquez l\'adresse e-mail de votre compte : nous vous envoyons un code à 6 chiffres '
+                  const Text('Indiquez l\'adresse e-mail de votre compte : nous vous envoyons un code à 6 chiffres '
                       'pour choisir un nouveau mot de passe.', style: TextStyle(color: Couleurs.texte2))
                 else
                   Text.rich(
@@ -212,7 +212,7 @@ class _PageMotDePasseOublieState extends State<PageMotDePasseOublie> {
                       child: const Text('Changer d\'adresse'),
                     ),
                   ]),
-                  const Text('Pas reçu ? Pensez aux courriers indésirables.',
+                  const Text('Pas reçu ? Pensez aux courriers indésirables.',
                       textAlign: TextAlign.center, style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
                 ],
                 const SizedBox(height: 8),

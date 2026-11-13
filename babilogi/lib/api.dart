@@ -88,7 +88,7 @@ class Api {
       403 => 'Accès réservé.',
       // « Adresse inconnue » = route absente : le serveur lancé est une ancienne version.
       404 when corps is Map && corps['message'] == 'Adresse inconnue.' =>
-        'Fonction indisponible : le serveur BabiLogis lancé est une ancienne version. '
+        'Fonction indisponible : le serveur BabiLogis lancé est une ancienne version. '
             'Redémarrez-le (Ctrl + C puis dart run bin/serveur.dart).',
       404 => corps is Map && corps['message'] is String ? corps['message'] as String : 'Page ou annonce introuvable.',
       429 => 'Trop de tentatives. Patientez une minute.',

@@ -113,7 +113,7 @@ class _PageConnexionState extends State<PageConnexion> {
                               path: '/mot-de-passe-oublie',
                               queryParameters: _email.text.trim().isEmpty ? null : {'email': _email.text.trim()},
                             ).toString()),
-                        child: const Text('Mot de passe oublié ?'),
+                        child: const Text('Mot de passe oublié ?'),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -125,7 +125,7 @@ class _PageConnexionState extends State<PageConnexion> {
                     ),
                     const SizedBox(height: 12),
                     Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-                      const Text('Pas encore de compte ?'),
+                      const Text('Pas encore de compte ?'),
                       TextButton(onPressed: () => aller(context, '/inscription', remplacer: true), child: const Text('Créer un compte')),
                     ]),
                   ],
@@ -198,7 +198,7 @@ class _PageInscriptionState extends State<PageInscription> {
         'consentement': _consentement,
       });
       if (!mounted) return;
-      message(context, 'Compte créé : un code vous a été envoyé par e-mail.');
+      message(context, 'Compte créé : un code vous a été envoyé par e-mail.');
       aller(context, _routeVerification(email, null), remplacer: true);
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -315,7 +315,7 @@ class _PageInscriptionState extends State<PageInscription> {
                             controller: _nom,
                             textCapitalization: TextCapitalization.words,
                             autofillHints: const [AutofillHints.name],
-                            decoration: deco(hint: agence ? 'Ex. : Immo Lagune' : 'Ex. : Awa Koné', erreur: _erreurs['nom']))),
+                            decoration: deco(hint: agence ? 'Ex. : Immo Lagune' : 'Ex. : Awa Koné', erreur: _erreurs['nom']))),
                     Champ(
                         'Téléphone (facultatif)',
                         TextField(
@@ -407,7 +407,7 @@ class _PageInscriptionState extends State<PageInscription> {
                   ),
                   const SizedBox(height: 14),
                   Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center, children: [
-                    const Text('Déjà inscrit ?', style: TextStyle(color: Couleurs.texte2)),
+                    const Text('Déjà inscrit ?', style: TextStyle(color: Couleurs.texte2)),
                     TextButton(onPressed: () => aller(context, '/connexion', remplacer: true), child: const Text('Se connecter')),
                   ]),
                 ],
@@ -458,7 +458,7 @@ class _CarteProfil extends StatelessWidget {
     return Semantics(
       button: true,
       selected: choisi,
-      label: '$titre : $detail',
+      label: '$titre : $detail',
       excludeSemantics: true,
       child: Material(
         color: choisi ? Couleurs.primarySoft : Colors.white,
@@ -510,8 +510,8 @@ class _JaugeMotDePasse extends StatelessWidget {
   Widget build(BuildContext context) {
     final (libelle, couleur) = switch (force) {
       -1 => ('8 caractères minimum, avec des chiffres et une majuscule pour plus de sécurité.', Couleurs.texte2),
-      0 => ('Trop court : 8 caractères minimum.', Couleurs.danger),
-      1 => ('Correct : ajoutez des chiffres ou une majuscule.', Couleurs.hautFg),
+      0 => ('Trop court : 8 caractères minimum.', Couleurs.danger),
+      1 => ('Correct : ajoutez des chiffres ou une majuscule.', Couleurs.hautFg),
       2 => ('Bon mot de passe.', Couleurs.justeFg),
       _ => ('Excellent mot de passe.', Couleurs.justeFg),
     };
@@ -592,7 +592,7 @@ class _PageVerificationState extends State<PageVerification> {
     try {
       await SessionScope.read(context).verifierEmail(widget.email, _code.text);
       if (!mounted) return;
-      message(context, 'Adresse vérifiée. Bienvenue sur BabiLogis !');
+      message(context, 'Adresse vérifiée. Bienvenue sur BabiLogis !');
       _apresConnexion(context, widget.suite);
     } on ApiException catch (e) {
       if (mounted) setState(() => _erreur = e.erreurs['code'] ?? e.message);
@@ -667,7 +667,7 @@ class _PageVerificationState extends State<PageVerification> {
               ),
               const SizedBox(height: 12),
               Wrap(crossAxisAlignment: WrapCrossAlignment.center, alignment: WrapAlignment.center, children: [
-                const Text('Pas reçu ? Pensez aux courriers indésirables.'),
+                const Text('Pas reçu ? Pensez aux courriers indésirables.'),
                 TextButton(
                   onPressed: _attente > 0 ? null : _renvoyer,
                   child: Text(_attente > 0 ? 'Renvoyer le code (${_attente}s)' : 'Renvoyer le code'),

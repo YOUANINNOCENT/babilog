@@ -149,7 +149,7 @@ class _RechercheState extends State<_Recherche> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.search,
             onSubmitted: (_) => _chercher(),
-            decoration: deco(hint: 'Ex : 200 000'),
+            decoration: deco(hint: 'Ex : 200 000'),
           ),
         ),
         FilledButton.icon(
@@ -301,9 +301,9 @@ class _AppelAnnonceurs extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Titre('Propriétaire ou agence ?', taille: 27, niveau: 2),
+                Titre('Propriétaire ou agence ?', taille: 27, niveau: 2),
                 SizedBox(height: 8),
-                Text('Publiez votre annonce : BabiLogis vous suggère un loyer cohérent avec le marché du quartier.'),
+                Text('Publiez votre annonce : BabiLogis vous suggère un loyer cohérent avec le marché du quartier.'),
               ],
             ),
             FilledButton(

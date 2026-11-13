@@ -347,22 +347,27 @@ class Puce extends StatelessWidget {
         selected: choisi,
         child: Material(
           color: choisi ? Couleurs.primarySoft : Colors.white,
-          shape: StadiumBorder(side: BorderSide(color: choisi ? Couleurs.primary : Couleurs.bordureForte)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: choisi ? Couleurs.primary : Couleurs.bordureForte)),
           child: InkWell(
-            customBorder: const StadiumBorder(),
+            customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             onTap: onTap,
-            // Taille = largeur du texte : les puces se placent côte à côte
-            // dans un Wrap au lieu d'occuper chacune toute la ligne.
+            // Taille = largeur du texte : les puces se placent côte à côte dans un Wrap.
+            // Un texte plus long que l'écran passe à la ligne au lieu de déborder.
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 40, minWidth: 44),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(texte,
-                        style: TextStyle(fontWeight: FontWeight.w600, color: choisi ? Couleurs.primary : Couleurs.texte)),
+                    Flexible(
+                      child: Text(texte,
+                          softWrap: true,
+                          style: TextStyle(fontWeight: FontWeight.w600, color: choisi ? Couleurs.primary : Couleurs.texte)),
+                    ),
                   ],
                 ),
               ),

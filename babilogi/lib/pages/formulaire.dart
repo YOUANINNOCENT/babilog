@@ -235,7 +235,7 @@ class _FormulaireState extends State<_Formulaire> {
               icon: const Icon(Icons.remove)),
           Expanded(
             child: Semantics(
-              label: '$libelle : $valeur',
+              label: '$libelle : $valeur',
               child: Text('$valeur', textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
             ),
           ),
@@ -337,13 +337,13 @@ class _FormulaireState extends State<_Formulaire> {
                 controller: _loyer,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9 ]'))],
-                decoration: deco(hint: 'Ex : 250 000', erreur: _erreurs['loyer']),
+                decoration: deco(hint: 'Ex : 250 000', erreur: _erreurs['loyer']),
               ),
             ),
             _compteur('Caution (mois)', _caution, 0, 2, (v) => _caution = v),
             _compteur('Avance (mois)', _avance, 0, 2, (v) => _avance = v),
           ]),
-          const Text('Loi n° 2018-575 : la caution et l\'avance sont limitées à 2 mois de loyer chacune.',
+          const Text('Loi n° 2018-575 : la caution et l\'avance sont limitées à 2 mois de loyer chacune.',
               style: TextStyle(color: Couleurs.texte2, fontSize: 14)),
           const SizedBox(height: 14),
           Champ(
@@ -423,7 +423,7 @@ class _Estimation extends StatelessWidget {
     final ecart = (d?['ecart_pourcent'] as num?)?.toInt() ?? 0;
     final conseil = switch (verdict) {
       'au_dessus' => 'Votre loyer est $ecart % au-dessus de l\'estimation centrale. Les annonces au prix juste reçoivent plus de visites.',
-      'bonne_affaire' => 'Votre loyer est en dessous du marché : votre annonce sera mise en avant.',
+      'bonne_affaire' => 'Votre loyer est en dessous du marché : votre annonce sera mise en avant.',
       'juste' => 'Votre loyer est dans la fourchette du marché.',
       _ => 'Saisissez le loyer pour voir l\'analyse.',
     };
@@ -544,7 +544,7 @@ class _Apercu extends StatelessWidget {
                 const Icon(Icons.visibility_outlined, color: Couleurs.primary),
                 const SizedBox(width: 10),
                 const Expanded(
-                  child: Text('Aperçu : voici ce que verront les locataires',
+                  child: Text('Aperçu : voici ce que verront les locataires',
                       style: TextStyle(fontWeight: FontWeight.w700, color: Couleurs.primary)),
                 ),
                 IconButton(
@@ -566,7 +566,7 @@ class _Apercu extends StatelessWidget {
                           Text(
                               reference == null
                                   ? 'Les photos s\'ajoutent juste après l\'enregistrement. Sans photo, des photos d\'illustration sont affichées.'
-                                  : 'Aucune photo : des photos d\'illustration seront affichées.',
+                                  : 'Aucune photo : des photos d\'illustration seront affichées.',
                               style: const TextStyle(color: Couleurs.texte2, fontSize: 13)),
                         ]);
                       }
@@ -743,7 +743,7 @@ class _GestionPhotosState extends State<GestionPhotos> {
             style: TextStyle(color: Couleurs.texte2)),
         const SizedBox(height: 14),
         if (choisies.isEmpty && automatiques.isNotEmpty) ...[
-          const Text('Aucune photo choisie : ces illustrations sont affichées automatiquement.',
+          const Text('Aucune photo choisie : ces illustrations sont affichées automatiquement.',
               style: TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 10),
         ],
@@ -822,7 +822,7 @@ class _Bibliotheque extends StatelessWidget {
             final photos = s.data ?? const [];
             if (photos.isEmpty) {
               return const Center(
-                child: Text('Aucune illustration sur le serveur.\nLancez : python3 outils/collecter_images.py',
+                child: Text('Aucune illustration sur le serveur.\nLancez : python3 outils/collecter_images.py',
                     textAlign: TextAlign.center),
               );
             }

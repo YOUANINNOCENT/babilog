@@ -9,15 +9,17 @@
   <meta name="theme-color" content="#FFFFFF">
   <title>BabiLogis — Le bon logement, au juste prix</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>
     body { margin: 0; background: #F9F9F9; font-family: system-ui, sans-serif; }
     #chargement { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; color: #0F0F0F; font-weight: 700; font-size: 20px; }
-    #chargement span { width: 32px; height: 32px; border-radius: 9px; background: #FF0000; display: inline-block; }
+    #chargement img { width: 36px; height: 36px; display: block; }
   </style>
 </head>
 <body>
-  <div id="chargement"><span></span>BabiLogis</div>
+  <div id="chargement"><img src="icons/Icon-192.png" alt="">BabiLogis</div>
   <script>
     // Retire l'écran de chargement dès que Flutter affiche la première image.
     window.addEventListener('flutter-first-frame', function () {

@@ -27,9 +27,9 @@ class _MessageChat {
 
 const _exemples = [
   'Je cherche un 3 pièces à Cocody sous 300 000',
-  'Combien coûte un studio meublé à Yopougon ?',
-  '450 000 pour une villa 4 pièces à Bingerville, c\'est cher ?',
-  'Quelle commune est la moins chère pour un 2 pièces ?',
+  'Combien coûte un studio meublé à Yopougon ?',
+  '450 000 pour une villa 4 pièces à Bingerville, c\'est cher ?',
+  'Quelle commune est la moins chère pour un 2 pièces ?',
 ];
 
 class _PageAssistantState extends State<PageAssistant> {
@@ -102,7 +102,7 @@ class _PageAssistantState extends State<PageAssistant> {
               const Titre('Assistant logement', taille: 26),
               const SizedBox(height: 4),
               const Text(
-                'Posez votre question : je cherche dans les annonces et j\'estime les loyers avec le modèle BabiLogis.',
+                'Posez votre question : je cherche dans les annonces et j\'estime les loyers avec le modèle BabiLogis.',
                 style: TextStyle(color: Couleurs.texte2),
               ),
               const SizedBox(height: 14),
@@ -128,7 +128,7 @@ class _PageAssistantState extends State<PageAssistant> {
                         maxLength: 1000,
                         textInputAction: TextInputAction.send,
                         onSubmitted: (_) => _envoyer(),
-                        decoration: deco(hint: 'Ex. : un 2 pièces à Marcory sous 200 000').copyWith(counterText: ''),
+                        decoration: deco(hint: 'Ex. : un 2 pièces à Marcory sous 200 000').copyWith(counterText: ''),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -167,7 +167,7 @@ class _Accueil extends StatelessWidget {
                   CircleAvatar(backgroundColor: Couleurs.primarySoft, child: Icon(Icons.smart_toy_outlined, color: Couleurs.primary)),
                   SizedBox(width: 12),
                   Expanded(
-                    child: Text('Bonjour, je suis Babi. Essayez une de ces questions :',
+                    child: Text('Bonjour, je suis Babi. Essayez une de ces questions :',
                         style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                   ),
                 ],

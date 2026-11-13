@@ -202,7 +202,7 @@ class _Galerie extends StatelessWidget {
       galerie,
       const SizedBox(height: 8),
       Text(
-        'Photos d\'illustration libres de droits : elles ne représentent pas ce logement. '
+        'Photos d\'illustration libres de droits : elles ne représentent pas ce logement. '
         'Crédits : ${credits.join(' ; ')}.',
         style: const TextStyle(color: Couleurs.texte2, fontSize: 12.5),
       ),
@@ -236,7 +236,7 @@ class _Analyse extends StatelessWidget {
     final ecart = c == null || c == 0 ? 0 : ((a.loyer - c) / c * 100).round();
     final phrase = switch (a.verdict) {
       'juste' => 'Le prix demandé est dans la fourchette du marché.',
-      'bonne_affaire' => 'Le prix demandé est inférieur au marché : vérifiez bien le logement lors de la visite.',
+      'bonne_affaire' => 'Le prix demandé est inférieur au marché : vérifiez bien le logement lors de la visite.',
       'au_dessus' => 'Le prix demandé est supérieur au marché (${ecart > 0 ? '+' : ''}$ecart % par rapport à l\'estimation centrale). Vous pouvez négocier.',
       _ => 'L\'estimation de ce logement est en cours.',
     };
@@ -256,7 +256,7 @@ class _Analyse extends StatelessWidget {
             JaugePrix(loyer: a.loyer, minimum: a.estMin!, maximum: a.estMax!),
             const SizedBox(height: 12),
             Text.rich(TextSpan(children: [
-              const TextSpan(text: 'Loyer estimé pour ce logement : '),
+              const TextSpan(text: 'Loyer estimé pour ce logement : '),
               TextSpan(text: fcfa(a.estMin), style: const TextStyle(fontWeight: FontWeight.w800)),
               const TextSpan(text: ' à '),
               TextSpan(text: fcfa(a.estMax), style: const TextStyle(fontWeight: FontWeight.w800)),
@@ -478,7 +478,10 @@ class _SignalementState extends State<_Signalement> {
     }
     return Carte(
       padding: EdgeInsets.zero,
-      child: Theme(
+      // Material transparent : l'effet au toucher reste visible sur le fond blanc de la carte.
+      child: Material(
+        type: MaterialType.transparency,
+        child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           title: const Text('Signaler cette annonce', style: TextStyle(fontWeight: FontWeight.w700, color: Couleurs.primary)),
@@ -506,6 +509,7 @@ class _SignalementState extends State<_Signalement> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -562,14 +566,13 @@ class _AnnonceCollecteeState extends State<_AnnonceCollectee> {
     final u = SessionScope.of(context).utilisateur;
     final gestion = u != null && u.estAnnonceur;
     final lien = a.lienOrigine;
-    final site = lien == null ? null : Uri.tryParse(lien)?.host.replaceFirst('www.', '');
     return Carte(
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         if (gestion) ...[
           const Text('Gérer cette annonce', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
           const SizedBox(height: 6),
           const Text(
-              'Ce logement est le vôtre ? Mettez à jour le texte, le loyer et les photos : '
+              'Ce logement est le vôtre ? Mettez à jour le texte, le loyer et les photos : '
               'l\'annonce passera dans votre espace et vous recevrez les messages et demandes de visite.',
               style: TextStyle(color: Couleurs.texte2)),
           const SizedBox(height: 12),
@@ -589,7 +592,7 @@ class _AnnonceCollecteeState extends State<_AnnonceCollectee> {
           const Text('Contacter l\'annonceur', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
           const SizedBox(height: 6),
           const Text(
-              'L\'annonceur de ce logement n\'est pas encore inscrit sur BabiLogis : la messagerie et les demandes '
+              'L\'annonceur de ce logement n\'est pas encore inscrit sur BabiLogis : la messagerie et les demandes '
               'de visite ne sont pas disponibles pour cette annonce.',
               style: TextStyle(color: Couleurs.texte2)),
           if (lien != null) ...[
@@ -597,7 +600,7 @@ class _AnnonceCollecteeState extends State<_AnnonceCollectee> {
             OutlinedButton.icon(
               onPressed: () => launchUrl(Uri.parse(lien), webOnlyWindowName: '_blank'),
               icon: const Icon(Icons.open_in_new, size: 18),
-              label: Text('Voir l\'annonce d\'origine${site == null ? '' : ' ($site)'}'),
+              label: const Text('Voir l\'annonce d\'origine'),
             ),
           ],
         ],
@@ -620,7 +623,7 @@ class _Contacter extends StatelessWidget {
       return;
     }
     final champ = TextEditingController(
-        text: 'Bonjour, votre annonce ${a.id} (${a.titre} à ${a.quartier}) m\'intéresse. Est-elle toujours disponible ?');
+        text: 'Bonjour, votre annonce ${a.id} (${a.titre} à ${a.quartier}) m\'intéresse. Est-elle toujours disponible ?');
     final texte = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -643,7 +646,7 @@ class _Contacter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Carte(
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        const Text('Une question ?', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
+        const Text('Une question ?', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
         const SizedBox(height: 6),
         Text('Échangez directement avec ${a.annonceur.isEmpty || a.annonceur == 'Particulier' ? 'le propriétaire' : a.annonceur} '
             'dans la messagerie BabiLogis.', style: const TextStyle(color: Couleurs.texte2)),

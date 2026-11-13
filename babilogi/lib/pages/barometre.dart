@@ -30,7 +30,7 @@ class PageBarometre extends StatelessWidget {
               child: SizedBox(
               width: 700,
               child: Text(
-                'Loyer médian des annonces publiées sur BabiLogis, par commune. La médiane est le loyer du milieu : la moitié des logements sont moins chers, l\'autre moitié plus chers.',
+                'Loyer médian des annonces publiées sur BabiLogis, par commune. La médiane est le loyer du milieu : la moitié des logements sont moins chers, l\'autre moitié plus chers.',
                 style: TextStyle(color: Couleurs.texte2),
               ),
             )),
