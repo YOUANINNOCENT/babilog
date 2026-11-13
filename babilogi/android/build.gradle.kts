@@ -15,6 +15,13 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+// Certains modules (file_picker) visent encore Android 34 alors que leurs dépendances exigent 36 :
+// on compile tous les modules avec Android 36.
+subprojects {
+    afterEvaluate {
+        extensions.findByType(com.android.build.gradle.BaseExtension::class.java)?.compileSdkVersion(36)
+    }
+}
 subprojects {
     project.evaluationDependsOn(":app")
 }
