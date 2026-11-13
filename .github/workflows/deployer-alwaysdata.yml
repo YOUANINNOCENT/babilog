@@ -33,6 +33,18 @@ jobs:
       - name: Construire le site et le serveur
         run: sh deploiement/alwaysdata/preparer.sh
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Construire l'application Android (téléchargeable sur /babilogis.apk)
+        run: |
+          cd babilogi
+          flutter build apk --release --split-per-abi --target-platform android-arm64 \
+            --dart-define=API_URL=https://youan.alwaysdata.net/api
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ../deploiement/alwaysdata/envoi/site/babilogis.apk
+
       - name: Préparer la connexion SSH
         env:
           CLE: ${{ secrets.ALWAYSDATA_SSH_KEY }}
